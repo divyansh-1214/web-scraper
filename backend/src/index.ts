@@ -8,7 +8,8 @@ app.use(cors({
 }))
 
 const getData = async () => {
-  const res = await scrape("https://www.flipkart.com/search?q=apple+watch&page=1")
+  // const res = await scrape("https://www.flipkart.com/search?q=apple+watch&page=1")
+  const res = await scrape("https://www.flipkart.com/search?q=macbook&page=1")
   console.log(res)
   return res
 }
