@@ -13,11 +13,6 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
 
-    sourceVariantId: {
-      type: String,
-      default: null,
-    },
-
     title: {
       type: String,
       required: true,
@@ -27,16 +22,12 @@ const productSchema = new mongoose.Schema(
     brand: {
       type: String,
       trim: true,
+      default: "Apple"
     },
 
     category: {
       type: String,
       required: true,
-      trim: true,
-    },
-
-    subCategory: {
-      type: String,
       trim: true,
     },
 
@@ -62,7 +53,7 @@ const productSchema = new mongoose.Schema(
       default: 0,
     },
 
-    flipkartUrl: {
+    productUrl: {
       type: String,
       required: true,
     },
