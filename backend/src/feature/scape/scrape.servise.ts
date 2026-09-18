@@ -1,17 +1,19 @@
 import Product from '../../models/product.model.js';
+import { productType } from '../../models/product.model.js';
 
-export const createProduct = async (data: any) => {
+export const createProduct = async (data: productType) => {
   const product = new Product(data);
   await product.save();
 }
 
 export const transformProduct = (product: any) => {
+  const category = product.title.split(" ").find((val:string) =>  val === "iPhone" || val === "iPad" || val === "MacBook") ?? ""
   return {
     source: "flipkart",
     sourceProductId: product.sourceProductId,
     title: product.title,
     brand: "Apple",
-    category: "Laptop",
+    category: category,
     specifications: product.specifications || [],
     imageUrls: product.imageUrl
       ? [product.imageUrl]

@@ -1,5 +1,23 @@
 import mongoose from "mongoose";
 
+export interface productType {
+  source: string;
+  sourceProductId: string;
+  title: string;
+  brand: string;
+  category: string;
+  specifications: string[];
+  imageUrls: string[];
+  rating?: number;
+  ratingCount: number;
+  productUrl: string;
+  isAvailable: boolean;
+  lastScrapedAt: Date | null;
+  lastSeenAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const productSchema = new mongoose.Schema(
   {
     source: {
