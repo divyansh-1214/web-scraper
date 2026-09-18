@@ -32,9 +32,8 @@ const productSchema = new mongoose.Schema(
     },
 
     specifications: {
-      type: Map,
-      of: String,
-      default: {},
+      type: [String],
+      default: [],
     },
 
     imageUrls: {
@@ -85,4 +84,4 @@ productSchema.index(
   { unique: true }
 );
 
-module.exports = mongoose.model("Product", productSchema);
+export default mongoose.model("Product", productSchema);

@@ -11,5 +11,5 @@
     "sourceMap": true,
     "declaration": false
   },
-  "include": ["src"]
+  "include": ["src", "lib", "lib"]
 }
