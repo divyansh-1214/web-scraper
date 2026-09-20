@@ -1,5 +1,18 @@
 import mongoose from "mongoose";
 
+export interface IOffer {
+  productId: mongoose.Types.ObjectId;
+  source: string;
+  seller: string;
+  sellingPrice: number;
+  originalPrice?: number;
+  discountPercent?: number;
+  isAvailable: boolean;
+  checkedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const offerSchema = new mongoose.Schema(
   {
     productId: {

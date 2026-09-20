@@ -1,5 +1,13 @@
 import mongoose from "mongoose";
 
+export interface PriceHistoryType {
+  productId: mongoose.Types.ObjectId;
+  sellingPrice: number;
+  originalPrice?: number;
+  discountPercent?: number;
+  checkedAt: Date;
+}
+
 const priceHistorySchema = new mongoose.Schema(
   {
     productId: {

@@ -2,12 +2,20 @@ import Product from '../../models/product.model.js';
 import { productType } from '../../models/product.model.js';
 
 export const createProduct = async (data: productType) => {
-  const product = new Product(data);
-  await product.save();
+  try {
+    const product = new Product(data);
+    await product.save();
+  } catch (error) {
+    console.error(error);
+  }
 }
+type categoryType = "iPhone" | "iPad" | "MacBook" | undefined;
 
 export const transformProduct = (product: any) => {
-  const category = product.title.split(" ").find((val:string) =>  val === "iPhone" || val === "iPad" || val === "MacBook") ?? ""
+  const category: categoryType = product.title.split(" ").find((val: string) => val.toLowerCase() === "iPhone" || val.toLowerCase() === "iPad" || val.toLowerCase() === "MacBook")
+  if (category === undefined) {
+    return null
+  }
   return {
     source: "flipkart",
     sourceProductId: product.sourceProductId,

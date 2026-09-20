@@ -12,7 +12,7 @@ scraperRouter.post("/", async (req: Request, res: Response) => {
     const scapedData = await scrapeService(`https://www.flipkart.com/search?q=${q}&page=${page}`)
     if (scapedData.products.length === 0)
         return res.status(200).json({ message: "no products found fuck you bitch this does not work" })
-    const result = scapedData.products.map((product) => transformProduct(product));
+    const result = scapedData.products.map((product) => { transformProduct(product); });
     console.log(result)
     for (const product of result) {
       await createProduct(product)
