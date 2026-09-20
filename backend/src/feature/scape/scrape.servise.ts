@@ -3,6 +3,7 @@ import { productType } from '../../models/product.model.js';
 
 export const createProduct = async (data: productType) => {
   try {
+    // const updatedData = {...data, createdAt: new Date(), updatedAt: new Date()}
     const product = new Product(data);
     await product.save();
   } catch (error) {
