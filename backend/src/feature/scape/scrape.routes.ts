@@ -9,7 +9,7 @@ scraperRouter.post("/", async (req: Request, res: Response) => {
   try {
     const q = req.query.q
     const page = req.query.page ?? 1;
-    const scapedData = await scrapeService(`https://www.flipkart.com/search?q=${q}&page=${page}`)
+    const scapedData = await scrapeService(`https://www.flipkart.com/search?q=${q}&page=${page}&p%5B%5D=facets.brand%255B%255D%3DApple`)
     if (scapedData.products.length === 0)
       return res.status(200).json({ message: "no products found fuck you bitch this does not work" })
 
