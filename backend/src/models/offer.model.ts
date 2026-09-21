@@ -1,23 +1,20 @@
 import mongoose from "mongoose";
 
-export interface IOffer {
-  productId: mongoose.Types.ObjectId;
+export interface OfferType {
+  sourceProductId: string;
   source: string;
-  seller: string;
   sellingPrice: number;
   originalPrice?: number;
   discountPercent?: number;
   isAvailable: boolean;
   checkedAt: Date;
   createdAt: Date;
-  updatedAt: Date;
 }
 
 const offerSchema = new mongoose.Schema(
   {
-    productId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+    sourceProductId: {
+      type: String,
       required: true,
       index: true,
     },
@@ -26,12 +23,6 @@ const offerSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: "flipkart",
-    },
-
-    seller: {
-      type: String,
-      required: true,
-      trim: true,
     },
 
     sellingPrice: {
@@ -72,4 +63,4 @@ offerSchema.index({
   seller: 1,
 });
 
-module.exports = mongoose.model("Offer", offerSchema);
+export default mongoose.model("Offer", offerSchema);

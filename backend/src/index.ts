@@ -4,7 +4,7 @@ const app = express();
 import { connectDB } from './lib/db.js';
 import { configDotenv } from 'dotenv';
 import scraperRouter from './feature/scape/scrape.routes.js';
-import productRouter from './feature/scape/product/product.routes.js';
+import productRouter from './feature/product/product.routes.js';
 
 configDotenv();
 app.use(cors({

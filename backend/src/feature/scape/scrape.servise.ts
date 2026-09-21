@@ -1,19 +1,37 @@
 import Product from '../../models/product.model.js';
 import { productType } from '../../models/product.model.js';
+type categoryType = "iPhone" | "iPad" | "MacBook" | undefined;
+import Offer, { OfferType } from '../../models/offer.model.js';
 
-export const createProduct = async (data: productType) => {
+export const createProduct = async (data: any) => {
+  const res = transformProduct(data);
+  if (res === null) return null;
+  const product = new Product(res);
+  return await product.save();
+}
+
+export const createOffer = async (data: any) => {
+    const res = transformOffer(data);
+    if (res === null) return null;
+    const offer = new Offer(res);
+    return await offer.save();
+}
+
+export const deleteProduct = async (id: string) => {
+  return await Product.findByIdAndDelete(id);
+}
+
+export const isAvailable = async (data: productType) => {
   try {
-    // const updatedData = {...data, createdAt: new Date(), updatedAt: new Date()}
-    const product = new Product(data);
-    await product.save();
+    console.log(data)
   } catch (error) {
-    console.error(error);
+    console.log(error)
   }
 }
-type categoryType = "iPhone" | "iPad" | "MacBook" | undefined;
 
-export const transformProduct = (product: any) => {
-  const category: categoryType = product.title.split(" ").find((val: string) => val.toLowerCase() === "iPhone" || val.toLowerCase() === "iPad" || val.toLowerCase() === "MacBook")
+
+export const transformProduct = (product: any): productType | null => {
+  const category: categoryType = product.title.split(" ").find((val: string) => val.toLowerCase() === "iphone" || val.toLowerCase() === "ipad" || val.toLowerCase() === "macbook")
   if (category === undefined) {
     return null
   }
@@ -38,7 +56,34 @@ export const transformProduct = (product: any) => {
       : 0,
     productUrl: product.productUrl,
     isAvailable: product.isAvailable ?? true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     lastScrapedAt: new Date(),
     lastSeenAt: new Date(),
+  };
+};
+
+
+const parseNumericValue = (value: unknown, fallback = 0): number => {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value !== "string") return fallback;
+
+  const normalizedValue = value.replace(/[^\d.-]/g, "");
+  const parsedValue = Number(normalizedValue);
+  return Number.isFinite(parsedValue) ? parsedValue : fallback;
+};
+
+export const transformOffer = (product: any): OfferType => {
+  const [sellingPrice = 0, originalPrice = 0, discountPercent = 0] = product.price ?? [];
+
+  return {
+    sourceProductId: product.sourceProductId,
+    source: "flipkart",
+    sellingPrice: parseNumericValue(sellingPrice),
+    originalPrice: parseNumericValue(originalPrice),
+    discountPercent: parseNumericValue(discountPercent),
+    isAvailable: product.isAvailable ?? true,
+    checkedAt: new Date(),
+    createdAt: new Date(),
   };
 };

@@ -61,6 +61,7 @@ export async function extractProduct(card: Locator): Promise<ScrapedProduct | nu
       "src"
     );
     const price = await safeAllText(card.locator(SELECTORS.priceContainer).locator(SELECTORS.priceItem));
+
     const rating = await safeText(card.locator(SELECTORS.rating));
     const ratingCount = await safeText(
       card.locator(SELECTORS.ratingCount).locator("span").locator("span").first()
