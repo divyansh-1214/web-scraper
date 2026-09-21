@@ -1,26 +1,310 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --apple-bg: #ffffff;
+  --apple-bg-secondary: #f5f5f7;
+  --apple-bg-tertiary: #fbfbfd;
+  --apple-fg: #1d1d1f;
+  --apple-fg-secondary: #6e6e73;
+  --apple-fg-tertiary: #86868b;
+  --apple-blue: #0071e3;
+  --apple-blue-hover: #0077ed;
+  --apple-blue-active: #006edb;
+  --apple-separator: rgba(0, 0, 0, 0.08);
+  --apple-separator-strong: rgba(0, 0, 0, 0.16);
+  --apple-card: #ffffff;
+  --apple-card-hover: #fafafa;
+  --apple-success: #30d158;
+  --apple-warning: #ff9f0a;
+  --apple-danger: #ff3b30;
+  --apple-accent: #af52de;
+  --apple-gradient-hero: linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 100%);
+  --apple-gradient-product: linear-gradient(135deg, #1d1d1f 0%, #424245 100%);
+  --apple-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --apple-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --apple-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+  --radius-apple: 12px;
+  --radius-apple-lg: 18px;
+  --radius-apple-pill: 980px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --apple-bg: #000000;
+    --apple-bg-secondary: #1d1d1f;
+    --apple-bg-tertiary: #101012;
+    --apple-fg: #f5f5f7;
+    --apple-fg-secondary: #a1a1a6;
+    --apple-fg-tertiary: #86868b;
+    --apple-separator: rgba(255, 255, 255, 0.08);
+    --apple-separator-strong: rgba(255, 255, 255, 0.16);
+    --apple-card: #1c1c1e;
+    --apple-card-hover: #252528;
+    --apple-gradient-hero: linear-gradient(180deg, #101012 0%, #000000 100%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --color-bg: var(--apple-bg);
+  --color-bg-secondary: var(--apple-bg-secondary);
+  --color-bg-tertiary: var(--apple-bg-tertiary);
+  --color-fg: var(--apple-fg);
+  --color-fg-secondary: var(--apple-fg-secondary);
+  --color-fg-tertiary: var(--apple-fg-tertiary);
+  --color-blue: var(--apple-blue);
+  --color-blue-hover: var(--apple-blue-hover);
+  --color-blue-active: var(--apple-blue-active);
+  --color-separator: var(--apple-separator);
+  --color-separator-strong: var(--apple-separator-strong);
+  --color-card: var(--apple-card);
+  --color-card-hover: var(--apple-card-hover);
+  --color-success: var(--apple-success);
+  --color-warning: var(--apple-warning);
+  --color-danger: var(--apple-danger);
+  --color-accent: var(--apple-accent);
+  --radius-apple: var(--radius-apple);
+  --radius-apple-lg: var(--radius-apple-lg);
+  --radius-apple-pill: var(--radius-apple-pill);
+  --shadow-apple-sm: var(--apple-shadow-sm);
+  --shadow-apple-md: var(--apple-shadow-md);
+  --shadow-apple-lg: var(--apple-shadow-lg);
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--apple-bg);
+    color: var(--apple-fg);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+      "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  ::selection {
+    background: var(--apple-blue);
+    color: #ffffff;
+  }
+}
+
+@layer components {
+  .apple-container {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  @media (min-width: 1024px) {
+    .apple-container {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+  }
+
+  .apple-nav {
+    background: rgba(251, 251, 253, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--apple-separator);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .apple-nav {
+      background: rgba(16, 16, 18, 0.72);
+    }
+  }
+
+  .apple-hero {
+    background: var(--apple-gradient-hero);
+  }
+
+  .apple-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 22px;
+    border-radius: var(--radius-apple-pill);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .apple-btn-primary {
+    background: var(--apple-blue);
+    color: #ffffff;
+  }
+  .apple-btn-primary:hover {
+    background: var(--apple-blue-hover);
+    transform: translateY(-1px);
+  }
+  .apple-btn-primary:active {
+    background: var(--apple-blue-active);
+    transform: translateY(0);
+  }
+  .apple-btn-primary:disabled {
+    background: var(--apple-fg-tertiary);
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .apple-btn-secondary {
+    background: transparent;
+    color: var(--apple-blue);
+    font-weight: 500;
+  }
+  .apple-btn-secondary:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .apple-btn-ghost {
+    background: var(--apple-bg-secondary);
+    color: var(--apple-fg);
+  }
+  .apple-btn-ghost:hover {
+    background: var(--apple-card-hover);
+    transform: translateY(-1px);
+  }
+
+  .apple-card {
+    background: var(--apple-card);
+    border-radius: var(--radius-apple-lg);
+    box-shadow: var(--apple-shadow-md);
+    border: 1px solid var(--apple-separator);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+  .apple-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--apple-shadow-lg);
+  }
+
+  .apple-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: var(--radius-apple-pill);
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--apple-bg-secondary);
+    color: var(--apple-fg-secondary);
+    border: 1px solid var(--apple-separator);
+  }
+
+  .apple-heading {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--apple-fg);
+  }
+
+  .apple-eyebrow {
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--apple-fg-tertiary);
+  }
+
+  .apple-link {
+    color: var(--apple-blue);
+    font-size: 15px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: opacity 0.2s;
+  }
+  .apple-link:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .apple-divider {
+    height: 1px;
+    background: var(--apple-separator);
+    width: 100%;
+  }
+
+  .apple-skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--apple-bg-secondary) 25%,
+      var(--apple-card-hover) 50%,
+      var(--apple-bg-secondary) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+    border-radius: var(--radius-apple);
+  }
+
+  .apple-spinner {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2.5px solid var(--apple-separator);
+    border-top-color: var(--apple-blue);
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .apple-animate-in {
+    animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .apple-delay-1 { animation-delay: 0.05s; }
+  .apple-delay-2 { animation-delay: 0.1s; }
+  .apple-delay-3 { animation-delay: 0.15s; }
+  .apple-delay-4 { animation-delay: 0.2s; }
+  .apple-delay-5 { animation-delay: 0.25s; }
+  .apple-delay-6 { animation-delay: 0.3s; }
 }
