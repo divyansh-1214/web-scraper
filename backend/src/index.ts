@@ -8,7 +8,7 @@ import productRouter from './feature/product/product.routes.js';
 
 configDotenv();
 app.use(cors({
-  origin: "*"
+  origin: process.env.FRONTEND_URL
 }))
 
 app.use("/scrape", scraperRouter)
