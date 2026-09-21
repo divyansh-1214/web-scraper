@@ -16,12 +16,12 @@ app.use("/product",productRouter)
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({"meeage":" you are the best broooo"})
 })
-
+const PORT = process.env.PORT;
 const startServer = async () => {
   try {
     await connectDB();
-    await app.listen(3000);
-    console.log("http://localhost:3000/")
+    await app.listen(PORT);
+    console.log(`http://localhost:${PORT}`)
   } catch (error) {
     console.error(error)
   }

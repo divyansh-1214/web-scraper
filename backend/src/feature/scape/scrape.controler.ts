@@ -1,3 +1,4 @@
+import { type Request, type Response } from "express";
 import { scrape as scrapeService } from '../../lib/scraper/scraper.js';
 import { createProduct, transformProduct } from "./scrape.servise.js";
 

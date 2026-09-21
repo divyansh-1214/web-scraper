@@ -4,8 +4,8 @@ const productRouter = express.Router();
 
 productRouter.get("/", async (req: Request, res: Response) => {
   try {
-    const pageNum = req.query.page as number;
-    const pageSize = req.query.size as number;
+    const pageNum = Number(req.query.page) || 1;
+    const pageSize = Number(req.query.size) || 10;
     const data = await product.find({}).sort({ createdAt: -1 }).skip(pageSize * (pageNum - 1)).limit(pageSize);
     res.status(200).json({
       "message": "heyy",
