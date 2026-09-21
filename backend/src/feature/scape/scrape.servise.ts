@@ -11,24 +11,73 @@ export const createProduct = async (data: any) => {
 }
 
 export const createOffer = async (data: any) => {
-    const res = transformOffer(data);
-    if (res === null) return null;
-    const offer = new Offer(res);
-    return await offer.save();
+  const res = transformOffer(data);
+  if (res === null) return null;
+  const offer = new Offer(res);
+  return await offer.save();
 }
 
 export const deleteProduct = async (id: string) => {
   return await Product.findByIdAndDelete(id);
 }
 
-export const isAvailable = async (data: productType) => {
+export const isAvailable = async (data: any) => {
   try {
-    console.log(data)
+    console.log(data.sourceProductId)
+    const offer = await Offer.findOne({ sourceProductId: data.sourceProductId });
+    console.log(offer)
+    if (offer) {
+      return true;
+    }
+    return false;
   } catch (error) {
     console.log(error)
   }
 }
 
+export const updateProductAndCheckAvailability = async (data: any) => {
+  try {
+
+    const existingOffer = await Offer.findOne({
+      source: data.source,
+      sourceProductId: data.sourceProductId,
+    });
+    const offer = transformOffer(data);
+    if (!existingOffer) {
+      await Offer.create(offer);
+
+      return {
+        isAvailable: true,
+        changed: true,
+      };
+    }
+
+    const changed =
+      existingOffer.sellingPrice !== offer.sellingPrice ||
+      existingOffer.originalPrice !== offer.originalPrice ||
+      existingOffer.discountPercent !== offer.discountPercent ||
+      existingOffer.isAvailable !== offer.isAvailable;
+
+    if (changed) {
+      await Offer.findOneAndUpdate(
+        {
+          source: data.source,
+          sourceProductId: data.sourceProductId,
+        },
+        offer,
+        { new: true }
+      );
+    }
+
+    return {
+      isAvailable: true,
+      changed,
+    };
+
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 export const transformProduct = (product: any): productType | null => {
   const category: categoryType = product.title.split(" ").find((val: string) => val.toLowerCase() === "iphone" || val.toLowerCase() === "ipad" || val.toLowerCase() === "macbook")
