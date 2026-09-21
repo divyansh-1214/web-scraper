@@ -188,8 +188,7 @@ Success response, status `200`:
 
 ```json
 {
-  "message": "heyy",
-  "data": [
+  "products": [
     {
       "_id": "mongo-object-id",
       "source": "flipkart",
@@ -212,7 +211,7 @@ Success response, status `200`:
 }
 ```
 
-An empty page returns `200` with `data: []`. Database or query failures return status `500`:
+An empty page returns `200` with `products: []`. Database or query failures return status `500`:
 
 ```json
 {
@@ -220,7 +219,83 @@ An empty page returns `200` with `data: []`. Database or query failures return s
 }
 ```
 
+### `GET /product/:category`
+
+Returns products filtered by category.
+
+Example request:
+
+```http
+GET http://localhost:3000/product/iPhone?page=1&size=20
+```
+
+#### URL parameter
+
+| Parameter | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `category` | string | Yes | Category name from the product data, such as `iPhone`, `iPad`, or `MacBook`. |
+
+This route matches products with `category: category` and applies the same pagination pattern as `GET /product`.
+
+Success response, status `200`:
+
+```json
+{
+  "products": [
+    {
+      "_id": "mongo-object-id",
+      "category": "iPhone",
+      "title": "Apple iPhone 15",
+      "source": "flipkart"
+    }
+  ]
+}
+```
+
+If the filter returns nothing, the response is still `200` with `products: []`.
+
+### `GET /product/:id`
+
+Returns a single product by Mongo document ID.
+
+Example request:
+
+```http
+GET http://localhost:3000/product/64d2e0f0c8d8b40000000001
+```
+
+#### URL parameter
+
+| Parameter | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `id` | Mongo ObjectId string | Yes | The product document ID. |
+
+Success response, status `200`:
+
+```json
+{
+  "product": {
+    "_id": "64d2e0f0c8d8b40000000001",
+    "source": "flipkart",
+    "sourceProductId": "source-id",
+    "title": "Apple iPhone 15",
+    "category": "iPhone"
+  }
+}
+```
+
+If no product matches the ID, MongoDB returns `null`; the response will still be `200` with `product: null`.
+
+> Important: the route order matters. In Express, `GET /product/:category` and `GET /product/:id` can conflict because both match `/product/:value`. The current implementation defines `:category` before `:id`, so a route like `/product/123` is more likely to be matched by the category route if it is not a valid category or if the router is not ordered carefully. For production stability, the API should either use distinct path segments such as `/product/category/:category` and `/product/id/:id`, or route ordering should be explicitly designed around the actual identifiers.
+
 The response does not include a total count, current page, page size, or `hasNextPage`. A frontend can detect the end of the list when the returned item count is less than the requested `size`, but this is only a convention and not an explicit backend contract.
+
+### Product list and detail contract notes
+
+- `GET /product` and `GET /product/:category` reply with a `products` array.
+- `GET /product/:id` replies with a `product` object.
+- The frontend should not assume a single response shape across all product endpoints; each route has a different payload key.
+- The current route design is convenient for local development, but it is not strongly REST-safe because category and ID both share the same route parameter slot.
 
 ## Data Contracts
 

@@ -5,12 +5,13 @@ import { connectDB } from './lib/db.js';
 import { configDotenv } from 'dotenv';
 import scraperRouter from './feature/scape/scrape.routes.js';
 import productRouter from './feature/product/product.routes.js';
+import morgan from 'morgan';
 
 configDotenv();
 app.use(cors({
   origin: process.env.FRONTEND_URL
 }))
-
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use("/scrape", scraperRouter)
 app.use("/product",productRouter)
 app.get("/", (req: Request, res: Response) => {
