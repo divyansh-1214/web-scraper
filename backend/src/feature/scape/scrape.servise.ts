@@ -25,7 +25,7 @@ export const isAvailable = async (data: any) => {
   try {
     console.log(data.sourceProductId)
     const offer = await Offer.findOne({ sourceProductId: data.sourceProductId });
-    console.log(offer)
+    // console.log(offer)
     if (offer) {
       return true;
     }
@@ -41,10 +41,7 @@ export const updateProductAndCheckAvailability = async (data: any) => {
     const existingOffer = await Offer.findOne({
       sourceProductId: data.sourceProductId,
     });
-    console.log(existingOffer)
-    console.log("\n");
     const offer = transformOffer(data);
-    console.log(offer)
     if (!existingOffer) {
       return {
         isAvailable: false,
@@ -57,7 +54,6 @@ export const updateProductAndCheckAvailability = async (data: any) => {
       existingOffer.discountPercent !== offer.discountPercent ||
       existingOffer.isAvailable !== offer.isAvailable;
 
-    console.log(changed)
     if (changed) {
       await Offer.findOneAndUpdate(
         {
