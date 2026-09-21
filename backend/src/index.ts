@@ -4,6 +4,7 @@ const app = express();
 import { connectDB } from './lib/db.js';
 import { configDotenv } from 'dotenv';
 import scraperRouter from './feature/scape/scrape.routes.js';
+import productRouter from './feature/scape/product/product.routes.js';
 
 configDotenv();
 app.use(cors({
@@ -11,10 +12,10 @@ app.use(cors({
 }))
 
 app.use("/scrape", scraperRouter)
+app.use("/product",productRouter)
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({"meeage":" you are the best broooo"})
 })
-
 
 const startServer = async () => {
   try {
