@@ -8,7 +8,6 @@ export interface OfferType {
   discountPercent?: number;
   isAvailable: boolean;
   checkedAt: Date;
-  createdAt: Date;
 }
 
 const offerSchema = new mongoose.Schema(

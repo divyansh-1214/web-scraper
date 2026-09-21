@@ -39,16 +39,15 @@ export const updateProductAndCheckAvailability = async (data: any) => {
   try {
 
     const existingOffer = await Offer.findOne({
-      source: data.source,
       sourceProductId: data.sourceProductId,
     });
+    console.log(existingOffer)
+    console.log("\n");
     const offer = transformOffer(data);
+    console.log(offer)
     if (!existingOffer) {
-      await Offer.create(offer);
-
       return {
-        isAvailable: true,
-        changed: true,
+        isAvailable: false,
       };
     }
 
@@ -58,14 +57,19 @@ export const updateProductAndCheckAvailability = async (data: any) => {
       existingOffer.discountPercent !== offer.discountPercent ||
       existingOffer.isAvailable !== offer.isAvailable;
 
+    console.log(changed)
     if (changed) {
       await Offer.findOneAndUpdate(
         {
-          source: data.source,
           sourceProductId: data.sourceProductId,
         },
-        offer,
-        { new: true }
+        {
+          $set: offer,
+        },
+        {
+          upsert: true,
+          returnDocument: "after",
+        }
       );
     }
 
@@ -105,8 +109,6 @@ export const transformProduct = (product: any): productType | null => {
       : 0,
     productUrl: product.productUrl,
     isAvailable: product.isAvailable ?? true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
     lastScrapedAt: new Date(),
     lastSeenAt: new Date(),
   };
@@ -133,6 +135,5 @@ export const transformOffer = (product: any): OfferType => {
     discountPercent: parseNumericValue(discountPercent),
     isAvailable: product.isAvailable ?? true,
     checkedAt: new Date(),
-    createdAt: new Date(),
   };
 };

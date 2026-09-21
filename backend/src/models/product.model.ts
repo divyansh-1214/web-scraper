@@ -14,8 +14,6 @@ export interface productType {
   isAvailable: boolean;
   lastScrapedAt: Date | null;
   lastSeenAt: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const productSchema = new mongoose.Schema(

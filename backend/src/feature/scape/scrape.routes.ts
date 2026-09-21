@@ -16,9 +16,10 @@ scraperRouter.post("/", async (req: Request, res: Response) => {
 
     const result = await Promise.all(scapedData.products.map(async (product) => {
       const res = await updateProductAndCheckAvailability(product);
-      if (res?.isAvailable) {
+      console.log(res)
+      if ((res?.isAvailable)) {
         if (res.changed) {
-          return { success: true, sourceProductId: product.sourceProductId, reason: "product_available", changed: true };
+          return { success: true, sourceProductId: product.sourceProductId, reason: "product updated", changed: true };
         }
         return { success: true, sourceProductId: product.sourceProductId, reason: "product_available" };
       } else {
