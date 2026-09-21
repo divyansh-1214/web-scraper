@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import SmoothRouteHandler from "../components/SmoothRouteHandler";
 
 export const metadata: Metadata = {
   title: "Apple Products — Scraper Showcase",
@@ -24,6 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className="min-h-full flex flex-col bg-bg text-fg antialiased">
+        <Suspense fallback={null}>
+          <SmoothRouteHandler />
+        </Suspense>
         <Navbar />
         <main className="flex-1 w-full">{children}</main>
         <Footer />

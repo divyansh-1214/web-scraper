@@ -1,3 +1,6 @@
+'use client';
+
+import { useCallback, useState } from 'react';
 import Hero from '../components/Hero';
 import ProductList from '../components/ProductList';
 import CategoryTabs from '../components/CategoryTabs';
@@ -14,6 +17,7 @@ const featureTiles = [
     bg: 'linear-gradient(180deg, #1d1d1f 0%, #000 100%)',
     fg: '#f5f5f7',
     fgSec: 'rgba(245,245,247,0.68)',
+    delay: 'apple-delay-1',
   },
   {
     label: 'iPad',
@@ -25,6 +29,7 @@ const featureTiles = [
     bg: 'linear-gradient(180deg, #fbfbfd 0%, #eef0f3 100%)',
     fg: '#1d1d1f',
     fgSec: 'rgba(29,29,31,0.68)',
+    delay: 'apple-delay-2',
   },
   {
     label: 'MacBook',
@@ -36,27 +41,35 @@ const featureTiles = [
     bg: 'linear-gradient(180deg, #0a84ff 0%, #006edb 100%)',
     fg: '#ffffff',
     fgSec: 'rgba(255,255,255,0.82)',
+    delay: 'apple-delay-3',
   },
 ];
 
 export default function HomePage() {
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleScrapeComplete = useCallback(() => {
+    setRefreshKey((k) => k + 1);
+  }, []);
+
   return (
     <>
       <Hero
         eyebrow="Apple Products · Live Scraper"
         title="The latest Apple lineup, curated in real time."
         subtitle="A live product catalog for iPhone, iPad, and MacBook — scraped directly from Flipkart and refreshed at the push of a button."
+        onScrapeComplete={handleScrapeComplete}
       />
 
       <CategoryTabs />
 
       <section className="apple-container py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-          {featureTiles.map((tile, i) => (
+          {featureTiles.map((tile) => (
             <Link
               key={tile.href}
               href={tile.href}
-              className={`apple-card group block overflow-hidden relative apple-animate-in apple-delay-${i + 1}`}
+              className={`apple-card group block overflow-hidden relative apple-animate-in ${tile.delay}`}
               style={{ background: tile.bg, border: 'none' }}
             >
               <div className="p-8 h-full min-h-[280px] flex flex-col">
@@ -104,6 +117,7 @@ export default function HomePage() {
           showHeader
           title="Latest arrivals"
           description="Recently scraped products across every Apple category. Prices and availability subject to change."
+          refreshKey={refreshKey}
         />
       </section>
     </>

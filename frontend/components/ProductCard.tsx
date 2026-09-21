@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+import { useState } from 'react';
 import type { Product } from '../lib/types';
 
 interface ProductCardProps {
@@ -46,6 +48,8 @@ function formatCount(n: number) {
 
 export default function ProductCard({ product, priority = false, index = 0 }: ProductCardProps) {
   const img = product.imageUrls?.[0] ?? '';
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgFailed, setImgFailed] = useState(false);
   const delayClass =
     index % 6 === 0
       ? 'apple-delay-1'
@@ -66,20 +70,29 @@ export default function ProductCard({ product, priority = false, index = 0 }: Pr
       rel="noopener noreferrer"
       className={`apple-card group block h-full flex flex-col apple-animate-in ${delayClass}`}
       aria-label={`${product.title} - Open on Flipkart`}
+      style={{ contain: 'layout paint' }}
     >
       <div className="relative w-full aspect-square bg-bg-secondary overflow-hidden">
-        {img ? (
-          // eslint-disable-next-line @next/next/no-img-element
+        {!imgLoaded && !imgFailed && (
+          <div className="absolute inset-0 apple-skeleton m-6 rounded-[10px]" aria-hidden="true" />
+        )}
+        {img && !imgFailed ? (
           <img
             src={img}
             alt={product.title}
             loading={priority ? 'eager' : 'lazy'}
-            className="absolute inset-0 w-full h-full object-contain p-6 transition-transform duration-500 ease-out group-hover:scale-105"
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).style.display = 'none';
+            decoding="async"
+            className={`absolute inset-0 w-full h-full object-contain p-6 transition-all duration-500 ease-out group-hover:scale-105 ${
+              imgLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]'
+            }`}
+            onLoad={() => setImgLoaded(true)}
+            onError={() => {
+              setImgFailed(true);
+              setImgLoaded(true);
             }}
           />
-        ) : (
+        ) : null}
+        {imgFailed && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-20 h-20 rounded-full bg-bg-tertiary flex items-center justify-center text-fg-tertiary text-xs">
               No image

@@ -1,6 +1,8 @@
 'use client';
 
+import { useCallback, useEffect } from 'react';
 import { useProducts } from '../hooks/useProducts';
+import { useScrape } from '../hooks/useScrape';
 import LoadingState from './LoadingState';
 import EmptyState from './EmptyState';
 import ProductGrid from './ProductGrid';
@@ -14,6 +16,7 @@ interface ProductListProps {
   showHeader?: boolean;
   title?: string;
   description?: string;
+  refreshKey?: number;
 }
 
 export default function ProductList({
@@ -23,6 +26,7 @@ export default function ProductList({
   showHeader = true,
   title,
   description,
+  refreshKey = 0,
 }: ProductListProps) {
   const { products, loading, error, hasMore, loadMore, refresh } = useProducts({
     size: pageSize,
@@ -30,15 +34,32 @@ export default function ProductList({
     autoFetch: true,
   });
 
+  const scrape = useScrape();
+
+  useEffect(() => {
+    if (refreshKey > 0) {
+      const t = setTimeout(() => refresh(), 100);
+      return () => clearTimeout(t);
+    }
+  }, [refreshKey, refresh]);
+
   const displayCategoryTitle =
     title ??
     (filterCategory
       ? `Apple ${filterCategory.charAt(0).toUpperCase() + filterCategory.slice(1)}`
       : 'All Products');
 
-  const handleScrapeComplete = () => {
+  const handleScrapeComplete = useCallback(() => {
     refresh();
-  };
+  }, [refresh]);
+
+  const scrapeAndRefresh = useCallback(async () => {
+    const query = filterCategory ?? 'iphone';
+    const res = await scrape.start(query, 1);
+    if (res) {
+      setTimeout(() => refresh(), 500);
+    }
+  }, [filterCategory, scrape, refresh]);
 
   return (
     <div className="w-full">
@@ -69,11 +90,20 @@ export default function ProductList({
             className="apple-btn apple-btn-ghost self-start md:self-auto"
             disabled={loading}
           >
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-4 h-4">
-              <path d="M1 8a7 7 0 0 1 11.6-5.3M15 8a7 7 0 0 1-11.6 5.3" strokeLinecap="round" />
-              <path d="M15 1v5h-5M1 15v-5h5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Refresh
+            {loading ? (
+              <>
+                <span className="apple-spinner" style={{ width: 16, height: 16, borderWidth: 2 }} />
+                Refreshing…
+              </>
+            ) : (
+              <>
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-4 h-4">
+                  <path d="M1 8a7 7 0 0 1 11.6-5.3M15 8a7 7 0 0 1-11.6 5.3" strokeLinecap="round" />
+                  <path d="M15 1v5h-5M1 15v-5h5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Refresh
+              </>
+            )}
           </button>
         </div>
       )}
@@ -105,7 +135,8 @@ export default function ProductList({
         <EmptyState
           title={`No ${filterCategory ? filterCategory + ' ' : ''}products found`}
           description="Start a scrape to pull the latest listings from Flipkart, or check back in a moment."
-          onAction={handleScrapeComplete as unknown as () => void}
+          actionLabel={scrape.running ? 'Scraping…' : 'Run Scraper'}
+          onAction={scrape.running ? undefined : scrapeAndRefresh}
         />
       ) : (
         <>

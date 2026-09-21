@@ -42,7 +42,7 @@ export function useProducts(options: UseProductsOptions = {}) {
       setState((s) => ({ ...s, loading: true, error: null }));
       try {
         const res = await getProducts(pageNum, size);
-        const raw = res.data || [];
+        const raw = res.products || [];
         const filtered = filterCategory
           ? raw.filter((p) => p.category.toLowerCase() === filterCategory.toLowerCase())
           : raw;
@@ -64,13 +64,14 @@ export function useProducts(options: UseProductsOptions = {}) {
   useEffect(() => {
     if (!autoFetch) return undefined;
     const timeoutId = setTimeout(() => {
-      fetchProducts(page, true);
+      setPage(1);
+      fetchProducts(1, true);
     }, 0);
     return () => {
       clearTimeout(timeoutId);
       abortRef.current?.abort();
     };
-  }, [autoFetch, page, filterCategory, fetchProducts]);
+  }, [autoFetch, filterCategory, fetchProducts]);
 
   const loadMore = useCallback(() => {
     if (state.loading || !state.hasMore) return;
@@ -91,5 +92,6 @@ export function useProducts(options: UseProductsOptions = {}) {
     loadMore,
     refresh,
     setPage,
+    fetchProducts,
   };
 }

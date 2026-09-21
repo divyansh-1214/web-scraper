@@ -19,7 +19,7 @@ export interface Product {
 
 export interface ProductResponse {
   message: string;
-  data: Product[];
+  products: Product[];
 }
 
 export interface ScrapeResultItem {
