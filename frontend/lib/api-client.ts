@@ -34,10 +34,19 @@ export async function getHealth(): Promise<{ meeage: string }> {
   return request<{ meeage: string }>('/');
 }
 
-export async function getProducts(page: number, size: number): Promise<ProductResponse> {
+export async function getProducts(page: number, size: number, category?: string): Promise<ProductResponse> {
   const p = Math.max(1, Math.floor(page));
   const s = Math.max(1, Math.min(100, Math.floor(size)));
+  if (category) {
+    return request<ProductResponse>(`/product/${category}?page=${p}&size=${s}`);
+  }
   return request<ProductResponse>(`/product?page=${p}&size=${s}`);
+}
+
+export async function getProductsWithCategory(category: string, page: number, size: number): Promise<ProductResponse> {
+  const p = Math.max(1, Math.floor(page));
+  const s = Math.max(1, Math.min(100, Math.floor(size)));
+  return request<ProductResponse>(`/product/${category}?page=${p}&size=${s}`);
 }
 
 export async function runScrape(query = 'iphone', page = 1): Promise<ScrapeResponse> {
@@ -50,5 +59,6 @@ export async function runScrape(query = 'iphone', page = 1): Promise<ScrapeRespo
 export const apiClient = {
   getHealth,
   getProducts,
+  getProductsWithCategory,
   runScrape,
 };

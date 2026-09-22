@@ -10,7 +10,7 @@ import ScrapePanel from './ScrapePanel';
 import type { Product } from '../lib/types';
 
 interface ProductListProps {
-  filterCategory?: 'iphone' | 'ipad' | 'macbook' | null;
+  filterCategory?: 'iPhone' | 'iPad' | 'MacBook' | null;
   pageSize?: number;
   showScraper?: boolean;
   showHeader?: boolean;

@@ -56,7 +56,7 @@ export default function IPadPage() {
 
       <section id="catalog" className="apple-container py-14 md:py-20">
         <ProductList
-          filterCategory="ipad"
+          filterCategory="iPad"
           pageSize={24}
           showScraper
           title="All iPad Models"

@@ -61,7 +61,7 @@ export default function MacBookPage() {
 
       <section id="catalog" className="apple-container py-14 md:py-20">
         <ProductList
-          filterCategory="macbook"
+          filterCategory="MacBook"
           pageSize={24}
           showScraper
           title="All MacBook Models"

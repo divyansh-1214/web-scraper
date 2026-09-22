@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { getProducts } from '../lib/api-client';
+import { getProducts, getProductsWithCategory } from '../lib/api-client';
 import type { Product } from '../lib/types';
 
 interface UseProductsOptions {
@@ -41,8 +41,10 @@ export function useProducts(options: UseProductsOptions = {}) {
       await Promise.resolve();
       setState((s) => ({ ...s, loading: true, error: null }));
       try {
-        const res = await getProducts(pageNum, size);
+        const res = await getProducts(pageNum, size, filterCategory ?? undefined);
+        console.log(res);
         const raw = res.products || [];
+        console.log(filterCategory);
         const filtered = filterCategory
           ? raw.filter((p) => p.category.toLowerCase() === filterCategory.toLowerCase())
           : raw;
